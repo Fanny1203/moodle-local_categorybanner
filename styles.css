@@ -1,0 +1,4 @@
+.local-categorybanner-notification {
+    margin-top: 60px !important; /* Espace pour éviter le chevauchement avec le bandeau */
+    margin-bottom: 15px;
+}
