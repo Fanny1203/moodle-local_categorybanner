@@ -18,7 +18,7 @@
  * Version details
  *
  * @package    local_categorybanner
- * @copyright  2025 Your Name <your@email.com>
+ * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

@@ -18,7 +18,7 @@
  * Edit banner rule
  *
  * @package    local_categorybanner
- * @copyright  2025 Your Name <your@email.com>
+ * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -70,16 +70,12 @@ if ($action === 'edit' && $ruleid >= 0) {
 if ($mform->is_cancelled()) {
     redirect($returnurl);
 } else if ($data = $mform->get_data()) {
-    if ($action === 'add') {
-        $ruleid = \local_categorybanner\rule_manager::get_next_rule_id();
-    }
-    
-    // Save the rule
-    set_config('rule_' . $ruleid . '_category', $data->category, 'local_categorybanner');
-    set_config('rule_' . $ruleid . '_banner', $data->banner['text'], 'local_categorybanner');
-    
-    // Clear cache to ensure the new rule is visible immediately
-    cache_helper::purge_by_event('local_categorybanner_rule_updated');
+    // Save the rule using rule manager
+    $ruleid = \local_categorybanner\rule_manager::save_rule(
+        $data->rule,
+        $data->category,
+        $data->banner['text']
+    );
     
     redirect($returnurl, get_string('rule_saved', 'local_categorybanner'), null, \core\output\notification::NOTIFY_SUCCESS);
 }

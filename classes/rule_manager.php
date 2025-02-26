@@ -18,7 +18,7 @@
  * Rule manager for category banner plugin
  *
  * @package    local_categorybanner
- * @copyright  2025 Your Name <your@email.com>
+ * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -30,6 +30,9 @@ defined('MOODLE_INTERNAL') || die();
  * Class for managing banner rules
  */
 class rule_manager {
+    /** @var string Prefix for rule settings in config */
+    const RULE_PREFIX = 'rule_';
+    
     /**
      * Get all banner rules
      *
@@ -41,13 +44,13 @@ class rule_manager {
         
         // Scan through config to find all rules
         foreach ((array)$config as $key => $value) {
-            if (preg_match('/^rule_(\d+)_category$/', $key, $matches)) {
+            if (preg_match('/^' . self::RULE_PREFIX . '(\d+)_category$/', $key, $matches)) {
                 $index = $matches[1];
-                if (isset($config->{'rule_' . $index . '_banner'})) {
+                if (isset($config->{self::RULE_PREFIX . $index . '_banner'})) {
                     $rules[] = array(
                         'id' => (int)$index,
-                        'category' => (int)$config->{'rule_' . $index . '_category'},
-                        'banner' => $config->{'rule_' . $index . '_banner'}
+                        'category' => (int)$config->{self::RULE_PREFIX . $index . '_category'},
+                        'banner' => $config->{self::RULE_PREFIX . $index . '_banner'}
                     );
                 }
             }
@@ -70,11 +73,12 @@ class rule_manager {
     public static function get_rule($ruleid) {
         $config = get_config('local_categorybanner');
         
-        if (isset($config->{'rule_' . $ruleid . '_category'}) && isset($config->{'rule_' . $ruleid . '_banner'})) {
+        if (isset($config->{self::RULE_PREFIX . $ruleid . '_category'}) && 
+            isset($config->{self::RULE_PREFIX . $ruleid . '_banner'})) {
             return array(
                 'id' => $ruleid,
-                'category' => (int)$config->{'rule_' . $ruleid . '_category'},
-                'banner' => $config->{'rule_' . $ruleid . '_banner'}
+                'category' => (int)$config->{self::RULE_PREFIX . $ruleid . '_category'},
+                'banner' => $config->{self::RULE_PREFIX . $ruleid . '_banner'}
             );
         }
         
@@ -111,5 +115,48 @@ class rule_manager {
         }
         $max_id = max(array_column($rules, 'id'));
         return $max_id + 1;
+    }
+
+    /**
+     * Save a rule
+     *
+     * @param int $ruleid Rule ID (-1 for new rule)
+     * @param int $categoryid Category ID
+     * @param string $banner Banner content
+     * @return int The ID of the saved rule
+     */
+    public static function save_rule($ruleid, $categoryid, $banner) {
+        if ($ruleid < 0) {
+            $ruleid = self::get_next_rule_id();
+        }
+        
+        set_config(self::RULE_PREFIX . $ruleid . '_category', $categoryid, 'local_categorybanner');
+        set_config(self::RULE_PREFIX . $ruleid . '_banner', $banner, 'local_categorybanner');
+        
+        // Clear cache
+        \cache_helper::purge_by_event('local_categorybanner_rule_updated');
+        
+        return $ruleid;
+    }
+
+    /**
+     * Delete a rule
+     *
+     * @param int $ruleid Rule ID to delete
+     * @return bool True if rule was deleted
+     */
+    public static function delete_rule($ruleid) {
+        $rule = self::get_rule($ruleid);
+        if (!$rule) {
+            return false;
+        }
+        
+        unset_config(self::RULE_PREFIX . $ruleid . '_category', 'local_categorybanner');
+        unset_config(self::RULE_PREFIX . $ruleid . '_banner', 'local_categorybanner');
+        
+        // Clear cache
+        \cache_helper::purge_by_event('local_categorybanner_rule_updated');
+        
+        return true;
     }
 }

@@ -18,7 +18,7 @@
  * Library functions for the category banner plugin
  *
  * @package    local_categorybanner
- * @copyright  2025 Your Name <your@email.com>
+ * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -54,18 +54,40 @@ function local_categorybanner_before_standard_html_head() {
 }
 
 /**
+ * Check if the current page layout is course-related
+ *
+ * @param string $layout Current page layout
+ * @return bool True if layout is course-related
+ */
+function local_categorybanner_is_course_layout($layout) {
+    $course_layouts = array('course', 'incourse', 'report', 'admin', 'coursecategory');
+    return in_array($layout, $course_layouts);
+}
+
+/**
+ * Render banner HTML for a given banner content
+ *
+ * @param string $content Banner content
+ * @return string HTML for the banner
+ */
+function local_categorybanner_render_banner($content) {
+    global $OUTPUT;
+    return html_writer::div(
+        $OUTPUT->notification(format_text($content, FORMAT_HTML), 'info'),
+        'local-categorybanner-notification'
+    );
+}
+
+/**
  * Insert banner into course pages if applicable
  *
  * @return string HTML content to insert or empty string
  */
 function local_categorybanner_before_standard_top_of_body_html() {
-    global $COURSE, $PAGE, $OUTPUT;
+    global $COURSE, $PAGE;
 
-    // Course related layouts
-    $course_layouts = array('course', 'incourse', 'report', 'admin', 'coursecategory');
-    
     // Only show banner on course-related pages
-    if (!in_array($PAGE->pagelayout, $course_layouts)) {
+    if (!local_categorybanner_is_course_layout($PAGE->pagelayout)) {
         return '';
     }
 
@@ -75,21 +97,10 @@ function local_categorybanner_before_standard_top_of_body_html() {
         return '';
     }
 
-    // Get all rules
-    $rules = \local_categorybanner\rule_manager::get_all_rules();
-    
-    // Check each rule
-    foreach ($rules as $rule) {
-        // If this rule matches the current category
-        if ($rule['category'] == $category->id) {
-            if (!empty($rule['banner'])) {
-                return html_writer::div(
-                    $OUTPUT->notification(format_text($rule['banner'], FORMAT_HTML), 'info'),
-                    'local-categorybanner-notification'
-                );
-            }
-            return '';
-        }
+    // Get banner content for category
+    $banner = \local_categorybanner\rule_manager::get_banner_for_category($category->id);
+    if (!empty($banner)) {
+        return local_categorybanner_render_banner($banner);
     }
 
     return '';
