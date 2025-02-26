@@ -43,18 +43,19 @@ if ($hassiteconfig) {
         }
     }
 
-    // Add main settings page
+    // Create the settings page
     $settings = new admin_settingpage('local_categorybanner', get_string('pluginname', 'local_categorybanner'));
     $ADMIN->add('localplugins', $settings);
 
     // Add rules management interface
     $settings->add(new admin_setting_categorybanner_rules());
 
-    // Add external page for editing rules
+    // Add external page for editing rules in a hidden section
     $ADMIN->add('localplugins', new admin_externalpage(
         'local_categorybanner_edit',
         get_string('edit_rule', 'local_categorybanner'),
         new moodle_url('/local/categorybanner/edit.php'),
-        'local_categorybanner:managebanner'
+        'local_categorybanner:managebanner',
+        true  // Hidden from menu
     ));
 }

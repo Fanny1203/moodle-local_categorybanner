@@ -61,50 +61,36 @@ function local_categorybanner_before_standard_html_head() {
 function local_categorybanner_before_standard_top_of_body_html() {
     global $COURSE, $PAGE, $OUTPUT;
 
-    // Debug info
-    /*
-    $debug = "Course category: " . $COURSE->category . "\n";
-    $debug .= "Page layout: " . $PAGE->pagelayout . "\n";
-    */
+    // Course related layouts
+    $course_layouts = array('course', 'incourse', 'report', 'admin', 'coursecategory');
     
-    // Only show banner on course pages
-    if ($PAGE->pagelayout !== 'course') {
-        //return $OUTPUT->notification($debug . "Not a course page", 'warning');
+    // Only show banner on course-related pages
+    if (!in_array($PAGE->pagelayout, $course_layouts)) {
         return '';
     }
 
     // Get course category
     $category = \core_course_category::get($COURSE->category, IGNORE_MISSING);
     if (!$category) {
-        //return $OUTPUT->notification($debug . "Category not found", 'warning');
         return '';
     }
 
     // Get all rules
     $rules = \local_categorybanner\rule_manager::get_all_rules();
-    //$debug .= "Rules found: " . count($rules) . "\n";
     
     // Check each rule
     foreach ($rules as $rule) {
         // If this rule matches the current category
         if ($rule['category'] == $category->id) {
-            /*
-            $debug .= "Rule category: " . $rule['category'] . "\n";
-            $debug .= "Rule banner: " . (!empty($rule['banner']) ? "Has content" : "Empty") . "\n";
-            */
-            
             if (!empty($rule['banner'])) {
                 return html_writer::div(
                     $OUTPUT->notification(format_text($rule['banner'], FORMAT_HTML), 'info'),
                     'local-categorybanner-notification'
                 );
             }
-            
-            //return $OUTPUT->notification($debug . "Banner is empty", 'warning');
             return '';
         }
     }
 
-    //return $OUTPUT->notification($debug . "No matching rule found", 'warning');
     return '';
 }
