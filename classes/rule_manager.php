@@ -17,6 +17,18 @@
 /**
  * Rule manager for category banner plugin
  *
+ * This class serves as the core business logic layer for managing banner rules. It provides
+ * a clean separation between data management and the user interface. The class is responsible for:
+ * - Retrieving all banner rules from the configuration
+ * - Getting specific rules by ID
+ * - Finding banners for specific categories
+ * - Managing rule storage and retrieval
+ *
+ * This class is used by both settings.php and edit.php to:
+ * - Provide data for the admin interface (settings.php)
+ * - Handle rule creation and updates (edit.php)
+ * - Maintain consistent data access across the plugin
+ *
  * @package    local_categorybanner
  * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -28,6 +40,18 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class for managing banner rules
+ * 
+ * Rules are stored in configuration and are identified by a unique ID. For instance it could look like:
+ * 
+ * plugin               | name            | value
+ * --------------------|-----------------|---------------------------------
+ * local_categorybanner | rule_1_category | "5"
+ * local_categorybanner | rule_1_banner   | "<div>Bannière Sciences</div>"
+ * local_categorybanner | rule_2_category | "8"
+ * local_categorybanner | rule_2_banner   | "<div>Bannière Histoire</div>"
+ * local_categorybanner | rule_3_category | "12"
+ * local_categorybanner | rule_3_banner   | "<div>Bannière Langues</div>"
+ * 
  */
 class rule_manager {
     /** @var string Prefix for rule settings in config */
@@ -35,6 +59,31 @@ class rule_manager {
     
     /**
      * Get all banner rules
+     * 
+     * Each rule is an associative array containing the following keys:
+     * - 'id': The ID of the rule
+     * - 'category': The category ID the rule applies to
+     * - 'banner': The HTML content of the banner
+     * 
+     * Exemple of returned array:
+     * 
+     * [
+     *     [
+     *         'id' => 1,
+     *         'category' => 5,
+     *         'banner' => '<div>Bannière Sciences</div>'
+     *     ],
+     *     [
+     *         'id' => 2,
+     *         'category' => 8,
+     *         'banner' => '<div>Bannière Histoire</div>'
+     *     ],
+     *     [
+     *         'id' => 3,
+     *         'category' => 12,
+     *         'banner' => '<div>Bannière Langues</div>'
+     *     ]
+     * ]
      *
      * @return array Array of rules, each containing category ID and banner content
      */
@@ -66,6 +115,8 @@ class rule_manager {
 
     /**
      * Get a specific rule by ID
+     * 
+     * (usefull for instance to delete or update an existing rule)
      *
      * @param int $ruleid The ID of the rule to get
      * @return array|null The rule data or null if not found

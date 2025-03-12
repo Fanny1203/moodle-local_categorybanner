@@ -16,6 +16,11 @@
 
 /**
  * Library functions for the category banner plugin
+ * 
+ * Things go more or less this way:
+ * - moodle loads a page
+ * - first hook, header : if the page is a course or incourse page, css is loaded
+ * - second hook, body : if the page is a course or incourse page, banner is printed
  *
  * @package    local_categorybanner
  * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
@@ -39,30 +44,63 @@ function local_categorybanner_extend_navigation_course($navigation, $course, $co
 }
 
 /**
- * Insert banner into course pages if applicable
+ * Check if we should display banner on current page
+ * 
+ * @param string $layout Current page layout
+ * @return bool True if banner should be displayed
+ */
+function local_categorybanner_should_display_banner($layout) {
+    $course_layouts = array('course', 'incourse', 'report', 'admin', 'coursecategory');
+    return in_array($layout, $course_layouts);
+}
+
+/**
+ * Insert CSS in page header if needed
+ * First hook, header
  *
  * @return string HTML content to insert or empty string
  */
 function local_categorybanner_before_standard_html_head() {
     global $PAGE;
     
-    // Load CSS for banner positioning if we're on a course page
-    if ($PAGE->pagelayout === 'course') {
+    // Load CSS if we're on a page that might display a banner
+    if (local_categorybanner_should_display_banner($PAGE->pagelayout)) {
         $PAGE->requires->css('/local/categorybanner/styles.css');
     }
     return '';
 }
 
+
+
 /**
- * Check if the current page layout is course-related
+ * Insert banner into course pages if applicable
+ * Second hook, body
  *
- * @param string $layout Current page layout
- * @return bool True if layout is course-related
+ * @return string HTML content to insert or empty string
  */
-function local_categorybanner_is_course_layout($layout) {
-    $course_layouts = array('course', 'incourse', 'report', 'admin', 'coursecategory');
-    return in_array($layout, $course_layouts);
+function local_categorybanner_before_standard_top_of_body_html() {
+    global $COURSE, $PAGE;
+
+    // Only show banner on course-related pages
+    if (!local_categorybanner_should_display_banner($PAGE->pagelayout)) {
+        return '';
+    }
+
+    // Get course category
+    $category = \core_course_category::get($COURSE->category, IGNORE_MISSING);
+    if (!$category) {
+        return '';
+    }
+
+    // Get and display banner if found
+    $banner = \local_categorybanner\rule_manager::get_banner_for_category($category->id);
+    if ($banner) {
+        return local_categorybanner_render_banner($banner);
+    }
+
+    return '';
 }
+
 
 /**
  * Render banner HTML for a given banner content
@@ -76,32 +114,4 @@ function local_categorybanner_render_banner($content) {
         $OUTPUT->notification(format_text($content, FORMAT_HTML), 'info'),
         'local-categorybanner-notification'
     );
-}
-
-/**
- * Insert banner into course pages if applicable
- *
- * @return string HTML content to insert or empty string
- */
-function local_categorybanner_before_standard_top_of_body_html() {
-    global $COURSE, $PAGE;
-
-    // Only show banner on course-related pages
-    if (!local_categorybanner_is_course_layout($PAGE->pagelayout)) {
-        return '';
-    }
-
-    // Get course category
-    $category = \core_course_category::get($COURSE->category, IGNORE_MISSING);
-    if (!$category) {
-        return '';
-    }
-
-    // Get banner content for category
-    $banner = \local_categorybanner\rule_manager::get_banner_for_category($category->id);
-    if (!empty($banner)) {
-        return local_categorybanner_render_banner($banner);
-    }
-
-    return '';
 }

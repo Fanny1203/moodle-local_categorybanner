@@ -78,6 +78,49 @@ Le plugin utilise le système de cache de Moodle :
 - Seuls les utilisateurs avec la capacité 'local_categorybanner:managebanner' peuvent gérer les règles
 - Le contenu HTML des bannières est filtré par Moodle pour la sécurité
 
+## Architecture du plugin
+
+Le plugin suit une architecture modulaire claire avec une séparation des responsabilités entre les différents fichiers :
+
+### Composants principaux
+
+#### 1. Interface d'administration (settings.php)
+- Point d'entrée pour l'intégration avec le système d'administration de Moodle
+- Crée la page de paramètres dans le menu d'administration
+- Gère la suppression des règles
+- Enregistre la page d'édition externe dans le système
+- Maintenu séparément de edit.php pour suivre l'architecture standard de Moodle
+
+#### 2. Interface d'édition (edit.php)
+- Page dédiée à l'édition d'une règle spécifique
+- Gère l'affichage du formulaire d'édition
+- Valide et sauvegarde les données du formulaire
+- Séparé de settings.php pour :
+  - Maintenir une séparation claire des responsabilités
+  - Permettre la réutilisation potentielle
+  - Améliorer la maintenabilité
+  - Suivre les conventions Moodle
+
+#### 3. Gestionnaire de règles (rule_manager.php)
+- Couche logique métier pour la gestion des règles
+- Fournit une interface claire entre les données et l'interface utilisateur
+- Utilisé par settings.php et edit.php pour :
+  - Fournir les données pour l'interface d'administration
+  - Gérer la création et la mise à jour des règles
+  - Assurer une gestion cohérente des données
+
+#### 4. Interface d'administration personnalisée (admin_setting_categorybanner_rules.php)
+- Extension de admin_setting pour créer une interface sur mesure
+- Agit comme couche de présentation
+- Crée l'interface HTML pour la gestion des règles
+- Intègre les fonctionnalités d'édition et de suppression
+
+Cette architecture modulaire permet :
+- Une maintenance plus facile
+- Une meilleure séparation des responsabilités
+- Une réutilisation potentielle des composants
+- Une conformité avec les standards de développement Moodle
+
 ## Licence
 
 Ce plugin est distribué sous licence GNU GPL v3 ou ultérieure.

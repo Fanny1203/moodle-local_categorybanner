@@ -17,6 +17,19 @@
 /**
  * Edit banner rule
  *
+ * This page handles the editing interface for individual banner rules. It is designed as a separate
+ * page from settings.php to follow Moodle's separation of concerns principle. This file is responsible for:
+ * - Displaying the edit form for creating/modifying banner rules
+ * - Handling form submission and data validation
+ * - Saving rule data through the rule_manager
+ * - Managing user permissions and access control
+ *
+ * The separation from settings.php allows this page to:
+ * - Focus solely on rule editing functionality
+ * - Be potentially reused in other contexts
+ * - Maintain cleaner code organization
+ * - Follow Moodle's standard plugin architecture
+ *
  * @package    local_categorybanner
  * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

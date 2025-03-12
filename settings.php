@@ -17,6 +17,13 @@
 /**
  * Plugin settings
  *
+ * This is the main configuration file for the Category Banner plugin. It serves as the integration
+ * point with Moodle's admin settings system and is responsible for:
+ * - Creating the plugin's admin settings page in Moodle's admin menu
+ * - Handling rule deletion operations
+ * - Registering the external edit.php page in Moodle's admin navigation
+ * - Setting up the admin interface components
+ *
  * @package    local_categorybanner
  * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later

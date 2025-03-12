@@ -17,6 +17,18 @@
 /**
  * Admin setting for managing banner rules
  *
+ * This class extends Moodle's admin_setting to create a custom interface for managing banner rules.
+ * It acts as the view layer in the plugin's architecture, responsible for:
+ * - Creating the HTML interface for viewing all banner rules
+ * - Displaying the management table with rule information
+ * - Providing action buttons for edit/delete operations
+ * - Integrating with Moodle's admin settings system
+ *
+ * This class works in conjunction with:
+ * - rule_manager.php: For data access and manipulation
+ * - settings.php: For integration into Moodle's admin interface
+ * - edit.php: For handling rule editing operations
+ *
  * @package    local_categorybanner
  * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -102,7 +114,7 @@ class admin_setting_categorybanner_rules extends admin_setting {
             $table->data = array();
             
             foreach ($rules as $rule) {
-                $category = core_course_category::get($rule['category'], IGNORE_MISSING);
+                $category = core_course_category::get($rule['category'], IGNORE_MISSING);// get category object given the ID stored in the rule
                 $categoryname = $category ? $category->get_formatted_name() : get_string('unknown_category', 'local_categorybanner');
                 
                 // Action buttons
@@ -120,7 +132,7 @@ class admin_setting_categorybanner_rules extends admin_setting {
                     array('title' => get_string('edit'))
                 );
                 
-                // Delete button
+                // Delete button, directly managed by settings because no need of extra interface
                 $deleteurl = new moodle_url('/admin/settings.php', array(
                     'section' => 'local_categorybanner',
                     'action' => 'delete',
