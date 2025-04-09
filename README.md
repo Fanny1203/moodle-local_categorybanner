@@ -1,126 +1,126 @@
 # Category Banner Plugin for Moodle
 
-Ce plugin permet d'afficher une bannière personnalisée sur les pages de cours en fonction de leur catégorie.
+This plugin allows you to display a custom banner on course pages based on their category.
 
-## Fonctionnalités
+## Features
 
-- Affichage d'une bannière HTML personnalisable pour chaque catégorie de cours
-- Configuration simple via l'interface d'administration de Moodle
-- La bannière s'affiche sur la page principale du cours et toutes ses pages associées (participants, notes, etc.)
-- Support du HTML et des styles CSS inline dans le contenu de la bannière
+- Display a customizable HTML banner for each course category
+- Simple configuration through Moodle's administration interface
+- Banner displays on the main course page and all associated pages (participants, grades, etc.)
+- Support for HTML and inline CSS styles in banner content
 
 ## Installation
 
-1. Téléchargez le plugin
-2. Copiez le dossier 'categorybanner' dans le répertoire /local/ de votre installation Moodle
-3. Visitez la page des notifications d'administration pour terminer l'installation
+1. Download the plugin
+2. Copy the 'categorybanner' folder to the /local/ directory of your Moodle installation
+3. Visit the administration notifications page to complete the installation
 
 ## Configuration
 
-1. Accédez à Administration du site > Plugins > Category Banner
-2. Pour chaque catégorie, vous pouvez définir le contenu HTML de la bannière
-3. Laissez le champ vide pour ne pas afficher de bannière pour une catégorie donnée
+1. Go to Site Administration > Plugins > Category Banner
+2. For each category, you can define the HTML content of the banner
+3. Leave the field empty to not display a banner for a given category
 
-## Structure du code
+## Code Structure
 
-### Fichiers principaux
-- `lib.php` : Fonctions principales du plugin
-  - `local_categorybanner_before_standard_top_of_body_html()` : Affichage de la bannière
-  - `local_categorybanner_is_course_layout()` : Vérifie si une page est liée à un cours
-  - `local_categorybanner_render_banner()` : Génère le HTML de la bannière
-- `version.php` : Version et dépendances du plugin
-- `settings.php` : Configuration et menu d'administration
+### Main Files
+- `lib.php`: Main plugin functions
+  - `local_categorybanner_before_standard_top_of_body_html()`: Banner display
+  - `local_categorybanner_is_course_layout()`: Checks if a page is course-related
+  - `local_categorybanner_render_banner()`: Generates banner HTML
+- `version.php`: Plugin version and dependencies
+- `settings.php`: Configuration and administration menu
 
-### Classes (dans /classes/)
-- `rule_manager.php` : Gestion des règles de bannière
-  - Constante `RULE_PREFIX` pour les clés de configuration
-  - Méthodes pour lire, sauvegarder et supprimer les règles
-- `admin_setting_categorybanner_rules.php` : Interface d'administration des règles
-- `form/edit_rule.php` : Formulaire d'édition des règles
+### Classes (in /classes/)
+- `rule_manager.php`: Banner rule management
+  - `RULE_PREFIX` constant for configuration keys
+  - Methods for reading, saving, and deleting rules
+- `admin_setting_categorybanner_rules.php`: Rules administration interface
+- `form/edit_rule.php`: Rule editing form
 
-### Base de données (dans /db/)
-- `access.php` : Définition des capacités utilisateur
-- `events.php` : Définition des événements de cache
+### Database (in /db/)
+- `access.php`: User capabilities definition
+- `events.php`: Cache events definition
 
 ### Interface
-- `edit.php` : Page d'édition des règles
-- `styles.css` : Styles CSS pour la bannière
-- `lang/en/local_categorybanner.php` : Chaînes de langue
+- `edit.php`: Rules editing page
+- `styles.css`: CSS styles for the banner
+- `lang/en/local_categorybanner.php`: Language strings
 
-## Pages où la bannière s'affiche
+## Pages Where the Banner Appears
 
-La bannière s'affiche sur toutes les pages avec les layouts suivants :
-- 'course' : Page principale du cours
-- 'incourse' : Activités et ressources du cours
-- 'report' : Pages de rapports
-- 'admin' : Pages d'administration du cours
-- 'coursecategory' : Pages de catégories de cours
+The banner appears on all pages with the following layouts:
+- 'course': Main course page
+- 'incourse': Course activities and resources
+- 'report': Report pages
+- 'admin': Course administration pages
+- 'coursecategory': Course category pages
 
-## Format de la bannière
+## Banner Format
 
-La bannière est affichée dans un conteneur avec la classe CSS `local-categorybanner-notification`. Par défaut, elle utilise le style de notification "info" de Moodle.
+The banner is displayed in a container with the CSS class `local-categorybanner-notification`. By default, it uses Moodle's "info" notification style.
 
-Exemple de contenu HTML :
+Example HTML content:
 ```html
 <div style="background-color: #f8d7da; color: #721c24; padding: 10px; margin: 10px 0; border: 1px solid #f5c6cb; border-radius: 4px;">
-    Message important concernant ce cours
+    Important message about this course
 </div>
 ```
 
 ## Cache
 
-Le plugin utilise le système de cache de Moodle :
-- Les règles sont mises en cache pour optimiser les performances
-- Le cache est purgé automatiquement lors de la modification d'une règle via l'événement 'local_categorybanner_rule_updated'
+The plugin uses Moodle's caching system:
+- Rules are cached to optimize performance
+- Cache is automatically purged when a rule is modified via the 'local_categorybanner_rule_updated' event
 
-## Sécurité
+## Security
 
-- Seuls les utilisateurs avec la capacité 'local_categorybanner:managebanner' peuvent gérer les règles
-- Le contenu HTML des bannières est filtré par Moodle pour la sécurité
+- Only users with the 'local_categorybanner:managebanner' capability can manage rules
+- Banner HTML content is filtered by Moodle for security
 
-## Architecture du plugin
+## Plugin Architecture
 
-Le plugin suit une architecture modulaire claire avec une séparation des responsabilités entre les différents fichiers :
+The plugin follows a clear modular architecture with separation of concerns between different files:
 
-### Composants principaux
+### Main Components
 
-#### 1. Interface d'administration (settings.php)
-- Point d'entrée pour l'intégration avec le système d'administration de Moodle
-- Crée la page de paramètres dans le menu d'administration
-- Gère la suppression des règles
-- Enregistre la page d'édition externe dans le système
-- Maintenu séparément de edit.php pour suivre l'architecture standard de Moodle
+#### 1. Administration Interface (settings.php)
+- Entry point for Moodle administration system integration
+- Creates settings page in administration menu
+- Handles rule deletion
+- Registers external editing page in the system
+- Maintained separately from edit.php to follow Moodle's standard architecture
 
-#### 2. Interface d'édition (edit.php)
-- Page dédiée à l'édition d'une règle spécifique
-- Gère l'affichage du formulaire d'édition
-- Valide et sauvegarde les données du formulaire
-- Séparé de settings.php pour :
-  - Maintenir une séparation claire des responsabilités
-  - Permettre la réutilisation potentielle
-  - Améliorer la maintenabilité
-  - Suivre les conventions Moodle
+#### 2. Editing Interface (edit.php)
+- Dedicated page for editing a specific rule
+- Handles edit form display
+- Validates and saves form data
+- Separated from settings.php for:
+  - Clear separation of responsibilities
+  - Potential reusability
+  - Improved maintainability
+  - Following Moodle conventions
 
-#### 3. Gestionnaire de règles (rule_manager.php)
-- Couche logique métier pour la gestion des règles
-- Fournit une interface claire entre les données et l'interface utilisateur
-- Utilisé par settings.php et edit.php pour :
-  - Fournir les données pour l'interface d'administration
-  - Gérer la création et la mise à jour des règles
-  - Assurer une gestion cohérente des données
+#### 3. Rule Manager (rule_manager.php)
+- Business logic layer for rule management
+- Provides clear interface between data and UI
+- Used by settings.php and edit.php to:
+  - Provide data for admin interface
+  - Handle rule creation and updates
+  - Ensure consistent data management
 
-#### 4. Interface d'administration personnalisée (admin_setting_categorybanner_rules.php)
-- Extension de admin_setting pour créer une interface sur mesure
-- Agit comme couche de présentation
-- Crée l'interface HTML pour la gestion des règles
-- Intègre les fonctionnalités d'édition et de suppression
+#### 4. Custom Administration Interface (admin_setting_categorybanner_rules.php)
+- Extends admin_setting to create custom interface
+- Acts as presentation layer
+- Creates HTML interface for rule management
+- Integrates editing and deletion functionality
 
-Cette architecture modulaire permet :
-- Une maintenance plus facile
-- Une meilleure séparation des responsabilités
-- Une réutilisation potentielle des composants
-- Une conformité avec les standards de développement Moodle
+This modular architecture allows for:
+- Easier maintenance
+- Better separation of concerns
+- Potential component reuse
+- Compliance with Moodle development standards
 
-## Licence
+## License
 
-Ce plugin est distribué sous licence GNU GPL v3 ou ultérieure.
+This plugin is distributed under the GNU GPL v3 or later license.

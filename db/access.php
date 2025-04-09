@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
     'local_categorybanner:managebanner' => array(
-        'riskbitmask' => RISK_XSS, //cette capacité présente un risque XSS (Cross-Site Scripting)
+        'riskbitmask' => RISK_XSS, //this capability has a risk of XSS (Cross-Site Scripting)
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM, 
         'archetypes' => array(
