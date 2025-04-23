@@ -1,25 +1,47 @@
 # Category Banner Plugin for Moodle
 
-Ce plugin permet d'afficher une bannière personnalisée sur les pages de cours en fonction de leur catégorie.
+Ce plugin permet d'afficher des bannières personnalisées en haut des pages de cours en fonction de leur catégorie.
 
 ## Fonctionnalités
 
-- Affichage d'une bannière HTML personnalisable pour chaque catégorie de cours
-- Configuration simple via l'interface d'administration de Moodle
-- La bannière s'affiche sur la page principale du cours et toutes ses pages associées (participants, notes, etc.)
-- Support du HTML et des styles CSS inline dans le contenu de la bannière
+- Définition de bannières personnalisées pour des catégories de cours spécifiques
+- Option de bannière globale pour afficher un message partout
+- Application des bannières aux sous-catégories en un clic
+- Support de bannières multiples : si plusieurs règles s'appliquent à un cours, tous les messages sont affichés avec un séparateur
+- Éditeur de texte riche pour le contenu des bannières
+- Gestion facile via l'interface d'administration de Moodle
 
 ## Installation
 
-1. Téléchargez le plugin
-2. Copiez le dossier 'categorybanner' dans le répertoire /local/ de votre installation Moodle
-3. Visitez la page des notifications d'administration pour terminer l'installation
+1. Copiez le dossier categorybanner dans le répertoire /local de votre installation Moodle
+2. Visitez la page des notifications pour terminer l'installation
+3. Configurez le plugin via Administration du site > Plugins > Plugins locaux > Category Banner
 
-## Configuration
+## Utilisation
 
-1. Accédez à Administration du site > Plugins > Category Banner
-2. Pour chaque catégorie, vous pouvez définir le contenu HTML de la bannière
-3. Laissez le champ vide pour ne pas afficher de bannière pour une catégorie donnée
+1. Accédez à la page d'administration du plugin
+2. Cliquez sur "Ajouter une règle" pour créer une bannière
+3. Choisissez entre :
+   - Une catégorie spécifique (et optionnellement ses sous-catégories)
+   - Toutes les pages (bannière globale qui apparaît partout)
+4. Saisissez le contenu de votre bannière avec l'éditeur de texte riche
+5. Enregistrez la règle
+
+Plusieurs règles peuvent s'appliquer au même cours. Par exemple :
+- Une bannière globale qui apparaît sur toutes les pages
+- Une bannière spécifique à une catégorie
+- Une bannière de catégorie parente qui s'applique aux sous-catégories
+
+Toutes les bannières applicables seront affichées en séquence, séparées par une ligne horizontale.
+
+## Permissions
+
+Le plugin utilise la capacité 'local/categorybanner:managebanner' pour contrôler qui peut gérer les règles de bannières.
+
+## Support
+
+Pour tout problème ou suggestion, veuillez contacter :
+Service École Média <sem.web@edu.ge.ch>
 
 ## Structure du code
 

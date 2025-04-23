@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version information
  *
  * @package    local_categorybanner
  * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025022606;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2022112800;        // Requires this Moodle version
-$plugin->component = 'local_categorybanner';  // Full name of the plugin
+$plugin->version   = 2025042300;        // The current plugin version
+$plugin->requires  = 2022112800;        // Requires Moodle 4.1 or later
+$plugin->component = 'local_categorybanner';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '1.0.6';
+$plugin->release   = '2.0.0';

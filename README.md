@@ -1,25 +1,47 @@
 # Category Banner Plugin for Moodle
 
-This plugin allows you to display a custom banner on course pages based on their category.
+This plugin allows you to display custom banners at the top of course pages based on their category.
 
 ## Features
 
-- Display a customizable HTML banner for each course category
-- Simple configuration through Moodle's administration interface
-- Banner displays on the main course page and all associated pages (participants, grades, etc.)
-- Support for HTML and inline CSS styles in banner content
+- Define custom banners for specific course categories
+- Global banner option to display a message on all pages
+- Apply banners to subcategories with a single click
+- Multiple banners support: if several rules apply to a course, all messages are displayed with a separator
+- Rich text editor for banner content
+- Easy management through Moodle's admin interface
 
 ## Installation
 
-1. Download the plugin
-2. Copy the 'categorybanner' folder to the /local/ directory of your Moodle installation
-3. Visit the administration notifications page to complete the installation
+1. Copy the categorybanner folder to your Moodle's /local directory
+2. Visit the notifications page to complete the installation
+3. Configure the plugin through Site administration > Plugins > Local plugins > Category Banner
 
-## Configuration
+## Usage
 
-1. Go to Site Administration > Plugins > Category Banner
-2. For each category, you can define the HTML content of the banner
-3. Leave the field empty to not display a banner for a given category
+1. Go to the plugin's administration page
+2. Click "Add new rule" to create a banner
+3. Choose between:
+   - A specific category (and optionally its subcategories)
+   - Every pages (global banner that appears everywhere)
+4. Enter your banner content using the rich text editor
+5. Save the rule
+
+Multiple rules can apply to the same course. For example:
+- A global banner that appears on all pages
+- A category-specific banner
+- A parent category banner that applies to subcategories
+
+All applicable banners will be displayed in sequence, separated by a horizontal line.
+
+## Permissions
+
+The plugin uses the capability 'local/categorybanner:managebanner' to control who can manage banner rules.
+
+## Support
+
+For any issues or suggestions, please contact:
+Service Ecole Media <sem.web@edu.ge.ch>
 
 ## Code Structure
 

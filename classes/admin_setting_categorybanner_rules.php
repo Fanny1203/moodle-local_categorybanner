@@ -114,8 +114,12 @@ class admin_setting_categorybanner_rules extends admin_setting {
             $table->data = array();
             
             foreach ($rules as $rule) {
-                $category = core_course_category::get($rule['category'], IGNORE_MISSING);// get category object given the ID stored in the rule
-                $categoryname = $category ? $category->get_formatted_name() : get_string('unknown_category', 'local_categorybanner');
+                $categoryname = $rule['category'] == -1 ? 
+                    get_string('all_categories', 'local_categorybanner') : 
+                    (core_course_category::get($rule['category'], IGNORE_MISSING) ? 
+                        core_course_category::get($rule['category'], IGNORE_MISSING)->get_formatted_name() : 
+                        get_string('unknown_category', 'local_categorybanner')
+                    );
                 
                 // Action buttons
                 $buttons = array();

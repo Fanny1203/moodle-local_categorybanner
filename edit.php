@@ -70,7 +70,8 @@ if ($action === 'edit' && $ruleid >= 0) {
             'banner' => array(
                 'text' => $rule['banner'],
                 'format' => FORMAT_HTML
-            )
+            ),
+            'apply_to_subcategories' => $rule['apply_to_subcategories']
         ));
     }
 } else {
@@ -87,7 +88,8 @@ if ($mform->is_cancelled()) {
     $ruleid = \local_categorybanner\rule_manager::save_rule(
         $data->rule,
         $data->category,
-        $data->banner['text']
+        $data->banner['text'],
+        !empty($data->apply_to_subcategories)
     );
     
     redirect($returnurl, get_string('rule_saved', 'local_categorybanner'), null, \core\output\notification::NOTIFY_SUCCESS);

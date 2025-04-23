@@ -36,20 +36,52 @@ class edit_rule extends \moodleform {
      * Form definition
      */
     public function definition() {
-        global $CFG;
+        global $CFG, $PAGE;
         
         $mform = $this->_form;
         
         // Category selector
         $categories = \core_course_category::make_categories_list();
+        // Add "Global banner" option at the top
+        $categories = array(\local_categorybanner\rule_manager::GLOBAL_BANNER_CATEGORY => get_string('global_banner', 'local_categorybanner')) + $categories;
         $mform->addElement('select', 'category', get_string('category', 'local_categorybanner'), $categories);
         $mform->setType('category', PARAM_INT);
         $mform->addRule('category', get_string('required'), 'required', null, 'client');
+        $mform->setDefault('category', \local_categorybanner\rule_manager::GLOBAL_BANNER_CATEGORY); // Set "Global banner" as default
         
         // Banner content
         $mform->addElement('editor', 'banner', get_string('banner_content', 'local_categorybanner'), array('rows' => 10));
         $mform->setType('banner', PARAM_RAW);
         $mform->addRule('banner', get_string('required'), 'required', null, 'client');
+        
+        // Apply to subcategories
+        $mform->addElement('advcheckbox', 'apply_to_subcategories', get_string('apply_to_subcategories', 'local_categorybanner'), '', array('group' => 1), array(0, 1));
+        $mform->setType('apply_to_subcategories', PARAM_BOOL);
+        $mform->setDefault('apply_to_subcategories', 0);
+        
+        // Add JavaScript to handle category selection
+        $PAGE->requires->js_amd_inline("
+            require(['jquery'], function($) {
+                var categorySelect = $('#id_category');
+                var subcategoriesCheckbox = $('#id_apply_to_subcategories');
+                var subcategoriesLabel = subcategoriesCheckbox.closest('.form-check').find('label');
+                var GLOBAL_BANNER_VALUE = " . \local_categorybanner\rule_manager::GLOBAL_BANNER_CATEGORY . ";
+                
+                function handleCategoryChange() {
+                    if (categorySelect.val() == GLOBAL_BANNER_VALUE) {
+                        subcategoriesCheckbox.prop('disabled', true);
+                        subcategoriesCheckbox.prop('checked', true);
+                        subcategoriesLabel.addClass('text-muted');
+                    } else {
+                        subcategoriesCheckbox.prop('disabled', false);
+                        subcategoriesLabel.removeClass('text-muted');
+                    }
+                }
+                
+                categorySelect.on('change', handleCategoryChange);
+                handleCategoryChange(); // Initial state
+            });
+        ");
         
         // Add rule index for editing
         $mform->addElement('hidden', 'rule', -1);
