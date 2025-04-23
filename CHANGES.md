@@ -1,5 +1,12 @@
 # Change Log
 
+## Version 2.0.1 (2025042301)
+
+### Changed
+- Renamed "Every pages" to "Global banner" for better clarity
+- Fixed language string consistency using global_banner instead of all_categories
+- Removed duplicate language string entry
+
 ## Version 2.0.0 (2025042300)
 
 ### Added

@@ -30,7 +30,7 @@ $string['add_rule'] = 'Add new rule';
 $string['edit_rule'] = 'Edit banner rule';
 $string['delete_rule'] = 'Delete banner rule';
 $string['category'] = 'Category';
-$string['global_banner'] = 'Every pages';
+$string['global_banner'] = 'Global banner';
 $string['apply_to_subcategories'] = 'Apply to subcategories';
 $string['banner_content'] = 'Banner content';
 $string['unknown_category'] = 'Unknown category';
@@ -40,4 +40,3 @@ $string['confirm_delete'] = 'Are you sure you want to delete this banner rule?';
 $string['categorybanner:managebanner'] = 'Manage category banners';
 
 $string['actions'] = 'Actions';
-$string['apply_to_subcategories'] = 'Apply to subcategories';

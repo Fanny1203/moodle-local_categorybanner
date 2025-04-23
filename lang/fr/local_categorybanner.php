@@ -44,7 +44,7 @@ $string['add_rule'] = 'Ajouter une nouvelle règle';
 $string['edit_rule'] = 'Modifier la régle';
 $string['delete_rule'] = 'Supprimer la régle';
 $string['category'] = 'Catégorie';
-$string['global_banner'] = 'Toutes les pages';
+$string['global_banner'] = 'Bannière globale';
 $string['apply_to_subcategories'] = 'Appliquer aux sous-catégories';
 $string['banner_content'] = 'Contenu de la bannière';
 $string['unknown_category'] = 'Catégorie inconnue';
@@ -52,5 +52,4 @@ $string['rule_saved'] = 'Règle enregistrée avec succès';
 $string['rule_deleted'] = 'Règle de bannière supprimée avec succès';
 $string['confirm_delete'] = 'Êtes-vous sûr de vouloir supprimer cette règle de bannière ?';
 $string['categorybanner:managebanner'] = 'Gérer les bannières de catégorie';
-
 $string['actions'] = 'Actions';

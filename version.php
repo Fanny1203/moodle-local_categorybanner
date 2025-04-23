@@ -24,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025042300;        // The current plugin version
+$plugin->version   = 2025042301;        // The current plugin version
 $plugin->requires  = 2022112800;        // Requires Moodle 4.1 or later
 $plugin->component = 'local_categorybanner';
 $plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '2.0.0';
+$plugin->release   = '2.0.1';
