@@ -15,17 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information
+ * Hook callbacks for local_categorybanner
  *
  * @package    local_categorybanner
- * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
+ * @author     Benjamin Walker (benjaminwalker@catalyst-au.net)
+ * @copyright  2025 Catalyst IT
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2025080800;        // The current plugin version
-$plugin->requires  = 2022112800;        // Requires Moodle 4.1 or later
-$plugin->component = 'local_categorybanner';
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->release   = '2.0.1';
+$callbacks = [
+    [
+        'hook' => \core\hook\output\before_standard_head_html_generation::class,
+        'callback' => '\local_categorybanner\hook_callbacks::before_standard_head_html_generation',
+        'priority' => 0,
+    ],
+    [
+        'hook' => \core\hook\output\before_standard_top_of_body_html_generation::class,
+        'callback' => '\local_categorybanner\hook_callbacks::before_standard_top_of_body_html_generation',
+        'priority' => 0,
+    ],
+];
