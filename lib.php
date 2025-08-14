@@ -68,27 +68,38 @@ function local_categorybanner_before_standard_top_of_body_html() {
 
     debugging('[CategoryBanner] Before body called. Course ID: ' . $COURSE->id . ', Layout: ' . $PAGE->pagelayout, DEBUG_DEVELOPER);
 
-    // Always check for global banners first
-    $global_banner = \local_categorybanner\rule_manager::get_banner_for_category(\local_categorybanner\rule_manager::GLOBAL_BANNER_CATEGORY);
+    $banners = array();
+
+    // Always check for global banners
+    $rules = \local_categorybanner\rule_manager::get_all_rules();
+    foreach ($rules as $rule) {
+        if ($rule['category'] == \local_categorybanner\rule_manager::GLOBAL_BANNER_CATEGORY) {
+            $banners[] = $rule['banner'];
+        }
+    }
     
     // For course-related pages, also check category banners
-    $category_banner = '';
     if (local_categorybanner_should_display_banner($PAGE->pagelayout)) {
         // Get course category
         $category = \core_course_category::get($COURSE->category, IGNORE_MISSING);
         if ($category) {
             debugging('[CategoryBanner] Found category ID: ' . $category->id, DEBUG_DEVELOPER);
-            $category_banner = \local_categorybanner\rule_manager::get_banner_for_category($category->id);
+            foreach ($rules as $rule) {
+                if ($rule['category'] == $category->id) {
+                    $banners[] = $rule['banner'];
+                }
+                else if ($rule['apply_to_subcategories']) {
+                    $path_parts = explode('/', trim($category->path, '/'));
+                    if (in_array($rule['category'], $path_parts)) {
+                        $banners[] = $rule['banner'];
+                    }
+                }
+            }
         }
     }
 
-    // Combine banners if both exist
-    if ($global_banner && $category_banner) {
-        return local_categorybanner_render_banner($global_banner . '<hr class="categorybanner-separator" />' . $category_banner);
-    } else if ($global_banner) {
-        return local_categorybanner_render_banner($global_banner);
-    } else if ($category_banner) {
-        return local_categorybanner_render_banner($category_banner);
+    if (!empty($banners)) {
+        return local_categorybanner_render_banner(implode('<hr class="categorybanner-separator" />', $banners));
     }
 
     debugging('[CategoryBanner] No banners found', DEBUG_DEVELOPER);

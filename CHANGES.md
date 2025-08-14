@@ -1,5 +1,9 @@
 # Change Log
 
+## 2.3.1 – 2025-08-14
+
+- Fixed issue where global banners were not displayed on all pages
+
 ## 2.3.0 – 2025-08-14
 
 - Removed manual CSS loading as it's handled automatically by Moodle
