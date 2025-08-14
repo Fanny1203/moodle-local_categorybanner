@@ -15,15 +15,30 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Event definitions for the category banner plugin
+ * Privacy provider implementation for local_categorybanner.
  *
  * @package    local_categorybanner
- * @copyright  2025 Service Ecole Media <sem.web@edu.ge.ch>
+ * @copyright  2025 Your Name <your@email.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace local_categorybanner\privacy;
 
-$events = array(
-    'local_categorybanner_rule_updated' => array('purge' => array('all' => true))
-);
+/**
+ * Privacy provider for the Category Banner plugin.
+ *
+ * @package    local_categorybanner
+ * @copyright  2025 Your Name <your@email.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class provider implements \core_privacy\local\metadata\null_provider {
+
+    /**
+     * Returns string identifier that explains why this plugin stores no data.
+     *
+     * @return string
+     */
+    public static function get_reason() : string {
+        return 'privacy:metadata';
+    }
+}

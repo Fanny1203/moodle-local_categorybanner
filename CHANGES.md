@@ -1,5 +1,19 @@
 # Change Log
 
+## 2.3.0 – 2025-08-14
+
+- Removed manual CSS loading as it's handled automatically by Moodle
+- Added Privacy API implementation (provider implementing null_provider as no personal data is stored)
+- Added Events API implementation for banner management (create/update/delete)
+- Modified global banners to display on all pages, not just course-related ones
+
+## 2.2.0 – 2025-08-14
+
+- Migrated to the new Moodle hook API (4.4+).
+- Added `db/hooks.php` and class-based callbacks.
+- Backward compatibility preserved via legacy functions (to be deprecated in a future release).
+- Thanks to @bwalkerl for the contribution.
+
 ## Version 2.0.1 (2025042301)
 
 ### Changed
@@ -22,11 +36,3 @@
 - Basic banner management per category
 - Rich text editor support
 - Course page integration
-
-
-## 2.2.0 – 2025-08-14
-
-- Migrated to the new Moodle hook API (4.4+).
-- Added `db/hooks.php` and class-based callbacks.
-- Backward compatibility preserved via legacy functions (to be deprecated in a future release).
-- Thanks to @bwalkerl for the contribution.

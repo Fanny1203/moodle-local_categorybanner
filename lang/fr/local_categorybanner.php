@@ -53,3 +53,9 @@ $string['rule_deleted'] = 'Règle de bannière supprimée avec succès';
 $string['confirm_delete'] = 'Êtes-vous sûr de vouloir supprimer cette règle de bannière ?';
 $string['categorybanner:managebanner'] = 'Gérer les bannières de catégorie';
 $string['actions'] = 'Actions';
+$string['privacy:metadata'] = 'Le plugin Category Banner ne stocke aucune donnée personnelle.';
+
+// Events
+$string['eventbannerrulecreated'] = 'Règle de bannière créée';
+$string['eventbannerruleupdated'] = 'Règle de bannière mise à jour';
+$string['eventbannerruledeleted'] = 'Règle de bannière supprimée';

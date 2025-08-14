@@ -40,3 +40,9 @@ $string['confirm_delete'] = 'Are you sure you want to delete this banner rule?';
 $string['categorybanner:managebanner'] = 'Manage category banners';
 
 $string['actions'] = 'Actions';
+$string['privacy:metadata'] = 'The Category Banner plugin does not store any personal data.';
+
+// Events
+$string['eventbannerrulecreated'] = 'Banner rule created';
+$string['eventbannerruleupdated'] = 'Banner rule updated';
+$string['eventbannerruledeleted'] = 'Banner rule deleted';

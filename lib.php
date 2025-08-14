@@ -56,26 +56,6 @@ function local_categorybanner_should_display_banner($layout) {
     return $should_display;
 }
 
-/**
- * Insert CSS in page header if needed
- * First hook, header
- *
- * @return string HTML content to insert or empty string
- */
-function local_categorybanner_before_standard_html_head() {
-    global $PAGE;
-    
-    debugging('[CategoryBanner] Before standard head called. Layout: ' . $PAGE->pagelayout, DEBUG_DEVELOPER);
-    
-    // Load CSS if we're on a page that might display a banner
-    if (local_categorybanner_should_display_banner($PAGE->pagelayout)) {
-        debugging('[CategoryBanner] Loading CSS', DEBUG_DEVELOPER);
-        $PAGE->requires->css('/local/categorybanner/styles.css');
-    }
-    return '';
-}
-
-
 
 /**
  * Insert banner into course pages if applicable
@@ -88,29 +68,30 @@ function local_categorybanner_before_standard_top_of_body_html() {
 
     debugging('[CategoryBanner] Before body called. Course ID: ' . $COURSE->id . ', Layout: ' . $PAGE->pagelayout, DEBUG_DEVELOPER);
 
-    // Only show banner on course-related pages
-    if (!local_categorybanner_should_display_banner($PAGE->pagelayout)) {
-        debugging('[CategoryBanner] Layout not supported', DEBUG_DEVELOPER);
-        return '';
+    // Always check for global banners first
+    $global_banner = \local_categorybanner\rule_manager::get_banner_for_category(\local_categorybanner\rule_manager::GLOBAL_BANNER_CATEGORY);
+    
+    // For course-related pages, also check category banners
+    $category_banner = '';
+    if (local_categorybanner_should_display_banner($PAGE->pagelayout)) {
+        // Get course category
+        $category = \core_course_category::get($COURSE->category, IGNORE_MISSING);
+        if ($category) {
+            debugging('[CategoryBanner] Found category ID: ' . $category->id, DEBUG_DEVELOPER);
+            $category_banner = \local_categorybanner\rule_manager::get_banner_for_category($category->id);
+        }
     }
 
-    // Get course category
-    $category = \core_course_category::get($COURSE->category, IGNORE_MISSING);
-    if (!$category) {
-        debugging('[CategoryBanner] No category found for course', DEBUG_DEVELOPER);
-        return '';
+    // Combine banners if both exist
+    if ($global_banner && $category_banner) {
+        return local_categorybanner_render_banner($global_banner . '<hr class="categorybanner-separator" />' . $category_banner);
+    } else if ($global_banner) {
+        return local_categorybanner_render_banner($global_banner);
+    } else if ($category_banner) {
+        return local_categorybanner_render_banner($category_banner);
     }
 
-    debugging('[CategoryBanner] Found category ID: ' . $category->id, DEBUG_DEVELOPER);
-
-    // Get and display banner if found
-    $banner = \local_categorybanner\rule_manager::get_banner_for_category($category->id);
-    if ($banner) {
-        debugging('[CategoryBanner] Banner found, rendering', DEBUG_DEVELOPER);
-        return local_categorybanner_render_banner($banner);
-    }
-
-    debugging('[CategoryBanner] No banner found for category', DEBUG_DEVELOPER);
+    debugging('[CategoryBanner] No banners found', DEBUG_DEVELOPER);
     return '';
 }
 

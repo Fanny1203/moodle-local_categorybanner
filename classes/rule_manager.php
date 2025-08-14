@@ -215,7 +215,8 @@ class rule_manager {
      * @return int The ID of the saved rule
      */
     public static function save_rule($ruleid, $categoryid, $banner, $apply_to_subcategories = false) {
-        if ($ruleid < 0) {
+        $is_new = ($ruleid < 0);
+        if ($is_new) {
             $ruleid = self::get_next_rule_id();
         }
         
@@ -225,6 +226,19 @@ class rule_manager {
         
         // Clear cache
         \cache_helper::purge_by_event('local_categorybanner_rule_updated');
+        
+        // Trigger event
+        $event_class = $is_new ? '\local_categorybanner\event\banner_rule_created' : '\local_categorybanner\event\banner_rule_updated';
+        $event = $event_class::create(array(
+            'context' => \context_system::instance(),
+            'objectid' => $ruleid,
+            'other' => array(
+                'categoryid' => $categoryid,
+                'global' => ($categoryid == self::GLOBAL_BANNER_CATEGORY),
+                'subcategories' => $apply_to_subcategories
+            )
+        ));
+        $event->trigger();
         
         return $ruleid;
     }
@@ -247,6 +261,17 @@ class rule_manager {
         
         // Clear cache
         \cache_helper::purge_by_event('local_categorybanner_rule_updated');
+        
+        // Trigger event
+        $event = \local_categorybanner\event\banner_rule_deleted::create(array(
+            'context' => \context_system::instance(),
+            'objectid' => $ruleid,
+            'other' => array(
+                'categoryid' => $rule['category'],
+                'global' => ($rule['category'] == self::GLOBAL_BANNER_CATEGORY)
+            )
+        ));
+        $event->trigger();
         
         return true;
     }

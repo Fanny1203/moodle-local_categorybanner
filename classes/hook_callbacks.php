@@ -40,8 +40,7 @@ class hook_callbacks {
         if (during_initial_install() || isset($CFG->upgraderunning)) {
             return;
         }
-
-        local_categorybanner_before_standard_html_head();
+        // CSS is automatically loaded by Moodle
     }
 
     /**
@@ -56,6 +55,9 @@ class hook_callbacks {
             return;
         }
 
-        local_categorybanner_before_standard_top_of_body_html();
+        $content = local_categorybanner_before_standard_top_of_body_html();
+        if ($content) {
+            $hook->add_html($content);
+        }
     }
 }
