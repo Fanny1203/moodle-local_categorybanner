@@ -22,3 +22,11 @@
 - Basic banner management per category
 - Rich text editor support
 - Course page integration
+
+
+## 2.2.0 – 2025-08-14
+
+- Migrated to the new Moodle hook API (4.4+).
+- Added `db/hooks.php` and class-based callbacks.
+- Backward compatibility preserved via legacy functions (to be deprecated in a future release).
+- Thanks to @bwalkerl for the contribution.

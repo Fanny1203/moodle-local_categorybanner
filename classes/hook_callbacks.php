@@ -38,7 +38,6 @@ class hook_callbacks {
         global $CFG;
 
         if (during_initial_install() || isset($CFG->upgraderunning)) {
-            // Do nothing during installation or upgrade.
             return;
         }
 
@@ -54,7 +53,6 @@ class hook_callbacks {
         global $CFG;
 
         if (during_initial_install() || isset($CFG->upgraderunning)) {
-            // Do nothing during installation or upgrade.
             return;
         }
 

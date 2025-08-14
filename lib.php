@@ -50,8 +50,10 @@ function local_categorybanner_extend_navigation_course($navigation, $course, $co
  * @return bool True if banner should be displayed
  */
 function local_categorybanner_should_display_banner($layout) {
-    $course_layouts = array('course', 'incourse', 'report', 'admin', 'coursecategory');
-    return in_array($layout, $course_layouts);
+    $course_layouts = array('course', 'incourse', 'report', 'admin', 'coursecategory', 'mydashboard');
+    $should_display = in_array($layout, $course_layouts);
+    debugging('[CategoryBanner] Should display banner for layout ' . $layout . ': ' . ($should_display ? 'yes' : 'no'), DEBUG_DEVELOPER);
+    return $should_display;
 }
 
 /**
@@ -63,8 +65,11 @@ function local_categorybanner_should_display_banner($layout) {
 function local_categorybanner_before_standard_html_head() {
     global $PAGE;
     
+    debugging('[CategoryBanner] Before standard head called. Layout: ' . $PAGE->pagelayout, DEBUG_DEVELOPER);
+    
     // Load CSS if we're on a page that might display a banner
     if (local_categorybanner_should_display_banner($PAGE->pagelayout)) {
+        debugging('[CategoryBanner] Loading CSS', DEBUG_DEVELOPER);
         $PAGE->requires->css('/local/categorybanner/styles.css');
     }
     return '';
@@ -81,23 +86,31 @@ function local_categorybanner_before_standard_html_head() {
 function local_categorybanner_before_standard_top_of_body_html() {
     global $COURSE, $PAGE;
 
+    debugging('[CategoryBanner] Before body called. Course ID: ' . $COURSE->id . ', Layout: ' . $PAGE->pagelayout, DEBUG_DEVELOPER);
+
     // Only show banner on course-related pages
     if (!local_categorybanner_should_display_banner($PAGE->pagelayout)) {
+        debugging('[CategoryBanner] Layout not supported', DEBUG_DEVELOPER);
         return '';
     }
 
     // Get course category
     $category = \core_course_category::get($COURSE->category, IGNORE_MISSING);
     if (!$category) {
+        debugging('[CategoryBanner] No category found for course', DEBUG_DEVELOPER);
         return '';
     }
+
+    debugging('[CategoryBanner] Found category ID: ' . $category->id, DEBUG_DEVELOPER);
 
     // Get and display banner if found
     $banner = \local_categorybanner\rule_manager::get_banner_for_category($category->id);
     if ($banner) {
+        debugging('[CategoryBanner] Banner found, rendering', DEBUG_DEVELOPER);
         return local_categorybanner_render_banner($banner);
     }
 
+    debugging('[CategoryBanner] No banner found for category', DEBUG_DEVELOPER);
     return '';
 }
 
